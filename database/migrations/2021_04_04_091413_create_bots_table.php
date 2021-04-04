@@ -21,6 +21,7 @@ class CreateBotsTable extends Migration
             $table->string("fs_app_secret")->comment("飞书 APP secret");
             $table->string("fs_access_token")->comment("飞书 token 用于调用飞书 API");
             $table->integer("fs_access_time")->comment("飞书 token 失效时间");
+            $table->string("remarks")->comment("备注");
             $table->timestamps();
         });
     }

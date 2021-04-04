@@ -22,6 +22,7 @@ class CreateAppsTable extends Migration
             $table->integer("status")->default(1)->comment("状态  0:禁用，1:启用");
             $table->json("users")->comment("订阅消息的用户们");
             $table->uuid("sign")->comment("签名，用于调用接口时的身份认证");
+            $table->string("remarks")->comment("备注");
             $table->timestamps();
         });
     }
