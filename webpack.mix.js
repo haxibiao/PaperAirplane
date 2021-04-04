@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,7 +11,20 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
+mix.js("resources/js/app.js", "public/js").postCss(
+    "resources/css/app.css",
+    "public/css",
+    [
         //
-    ]);
+    ]
+);
+
+// 后台登陆页面
+mix.js("resources/js/pages/login/index.js", "public/js/login.js")
+    .react()
+    .sass("resources/js/pages/login/scss/index.scss", "public/css/login.css");
+
+// 后台管理页面
+mix.js("resources/js/pages/admin/index.js", "public/js/admin.js")
+    .react()
+    .sass("resources/js/pages/admin/scss/index.scss", "public/css/admin.css");

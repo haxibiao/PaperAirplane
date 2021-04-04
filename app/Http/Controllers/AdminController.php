@@ -12,7 +12,8 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        dd($user);
+        // dd($user);
+        return view("admin");
     }
 
 }

@@ -13,7 +13,8 @@ class LoginController extends Controller
     public function index(Request $request)
     {
         # code...
-        dd($request);
+        // dd($request);
+        return view("login");
     }
 
     /**
