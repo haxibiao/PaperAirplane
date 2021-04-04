@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,8 +13,18 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::prefix('login')->group(function () {
+    Route::get('/', [LoginController::class, 'index']);
+    Route::get('/feishu', [LoginController::class, 'feishu']); // 飞书登陆授权回调
+    Route::get('/tofeishu', [LoginController::class, 'toFeishu']); // 跳转飞书授权页面
+});
+
+Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index']);
 });
