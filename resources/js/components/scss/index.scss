@@ -1,0 +1,41 @@
+.app-header {
+    background-color: #324157;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+
+    .logo {
+        .title {
+            margin: 0;
+            padding: 0;
+            line-height: 71px;
+            color: #fff;
+        }
+    }
+
+    .user-info {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+
+        .avatar-div {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+
+            .avatar-img {
+                width: 35px;
+                height: 35px;
+                border-radius: 100px;
+                background: #fff;
+            }
+
+            .icon-ic {
+                color: #fff;
+                margin-left: 10px;
+            }
+        }
+    }
+}

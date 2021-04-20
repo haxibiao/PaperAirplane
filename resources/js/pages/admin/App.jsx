@@ -1,5 +1,11 @@
 import React from "react";
+import { AppHeader } from "../../components";
 
 export default function App() {
-    return <div>Hello this is admin page!</div>;
+    return (
+        <div>
+            <AppHeader />
+            <div>Hello this is admin page!</div>
+        </div>
+    );
 }
