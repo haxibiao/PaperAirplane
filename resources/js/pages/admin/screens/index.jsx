@@ -6,11 +6,15 @@
 
 import Home from "./home";
 import Apps from "./apps";
+import Default from "./default";
 
-// 首页
+// 系统状态
 const HomeScreen = <Home />;
 
-// 首页
+// 应用管理
 const AppsScreen = <Apps />;
 
-export { HomeScreen, AppsScreen };
+// 404 页面
+const DefaultScreen = <Default />;
+
+export { HomeScreen, AppsScreen, DefaultScreen };
