@@ -9,6 +9,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Bot;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class BotController extends Controller
@@ -66,4 +68,14 @@ class BotController extends Controller
         return ["token" => $token, "time" => $time];
     }
 
+    public static function apiCreateBot(Request $request)
+    {
+        $user        = Auth::user();
+        $fsAppID     = "";
+        $fsAppSecret = "";
+        $remarks     = "";
+
+        // dd($request);
+        // dd(Auth::user());
+    }
 }

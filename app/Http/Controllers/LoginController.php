@@ -58,7 +58,7 @@ class LoginController extends Controller
             $user = UserController::create($fs_user_id, $fs_user_name, $fs_user_avatar_url);
         }
 
-        Auth::login($user);
+        Auth::login($user, true);
         return redirect()->intended('admin');
     }
 

@@ -24,6 +24,7 @@ class UserController extends Controller
         $user->fs_user_id         = $fs_user_id;
         $user->fs_user_name       = $fs_user_name;
         $user->fs_user_avatar_url = $fs_user_avatar_url;
+        $user->api_token          = Str::random(64);
 
         $user->save();
 
