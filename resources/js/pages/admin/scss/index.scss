@@ -3,13 +3,29 @@
 // 导入项目 components 组件 scss
 @import "../../../components/scss/index.scss";
 
-
-
 body {
     margin: 0;
     padding: 0;
 }
 
 #root {
+    .app-container {
+        display: flex;
 
+        .app-menu {
+            width: 220px;
+            min-height: calc(100vh - 71px);
+
+            .el-menu {
+                height: 100%;
+            }
+        }
+
+        .app-content {
+            flex: 1;
+            width: 100%;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+    }
 }
