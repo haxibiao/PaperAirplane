@@ -19,4 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:api')->post('/bot/create', [BotController::class, 'apiCreateBot']);
+Route::middleware('auth:api')->post('/bot/create', [BotController::class, 'ApiCreateBot']);
+Route::middleware('auth:api')->get('/bot/list', [BotController::class, 'ApiGetListByUser']);

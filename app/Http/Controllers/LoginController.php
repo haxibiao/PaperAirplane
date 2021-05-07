@@ -44,10 +44,10 @@ class LoginController extends Controller
 
         $bot = Bot::where('fs_app_id', $appid)->first();
         if (!$bot) {
-            $bot = BotController::create(User::find(1), $appid, $appsecret);
+            $bot = Bot::create(User::find(1), $appid, $appsecret);
         }
 
-        $fs_user = UserController::getFeishuUserInfo($bot->fs_access_token, $u_code);
+        $fs_user = User::getFeishuUserInfo($bot->fs_access_token, $u_code);
 
         if (!$fs_user && !isset($fs_user['user_id'])) {
             abort(403, "用户信息获取失败，请稍后重试！");
@@ -59,7 +59,7 @@ class LoginController extends Controller
         $user               = User::where("fs_user_id", $fs_user_id)->first();
 
         if (!$user) {
-            $user = UserController::create($fs_user_id, $fs_user_name, $fs_user_avatar_url);
+            $user = User::create($fs_user_id, $fs_user_name, $fs_user_avatar_url);
         }
 
         Auth::login($user, true);
