@@ -18,6 +18,12 @@ class LoginController extends Controller
         return view("login");
     }
 
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect()->route('login');
+    }
+
     /**
      * @description: 飞书授权回调页面
      * @param {Request} $request
