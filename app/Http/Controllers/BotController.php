@@ -30,14 +30,21 @@ class BotController extends Controller
         $bot->fs_app_id     = $fsAppID;
         $bot->fs_app_secret = $fsAppSecret;
         $bot->remarks       = $remarks;
-        $bot->user          = $user;
 
-        $accessTokenObj       = BotController::getFeishuAppAccessToken($fsAppID, $fsAppSecret);
-        $bot->fs_access_token = $accessTokenObj["token"];
-        $bot->fs_access_time  = time() + $accessTokenObj["time"];
+        if ($user) {
+            $bot->user_id = $user->id;
+        }
 
-        // $bot->save();
+        try {
+            $accessTokenObj       = BotController::getFeishuAppAccessToken($fsAppID, $fsAppSecret);
+            $bot->fs_access_token = $accessTokenObj["token"];
+            $bot->fs_access_time  = time() + $accessTokenObj["time"];
+        } catch (\Throwable $th) {
+            // 机器人添加失败，获取飞书 Access Token 出现异常
+            return null;
+        }
 
+        $bot->save();
         return $bot;
     }
 
@@ -68,12 +75,40 @@ class BotController extends Controller
         return ["token" => $token, "time" => $time];
     }
 
+    /**
+     * @description: 响应添加 Bot POST 请求函数
+     * @param {Request} $request
+     * @return {*}
+     */
     public static function apiCreateBot(Request $request)
     {
-        $user        = Auth::user();
-        $fsAppID     = "";
-        $fsAppSecret = "";
-        $remarks     = "";
+        // 定义关键参数数组
+
+        $fsAppID     = $request->json('app_id');
+        $fsAppSecret = $request->json('app_secret');
+        $remarks     = $request->json("remarks", "");
+
+        if (!Auth::check() || !$fsAppID || !$fsAppSecret) {
+            // 用户未登陆或缺少关键参数
+            return response()->json(['code' => -1, 'msg' => '关键参数不完整或用户信息异常。', 'data' => null]);
+        }
+
+        // 获取当前登陆用户
+        $user = Auth::user();
+
+        if (Bot::where('fs_app_id', $fsAppID)->first()) {
+            // 机器人已添加过
+            return response()->json(['code' => -1, 'msg' => '机器人已存在，添加失败。', 'data' => null]);
+        }
+
+        // 添加机器人成功
+        $bot = BotController::create($user, $fsAppID, $fsAppSecret, $remarks);
+
+        if (!$bot) {
+            return response()->json(['code' => -1, 'msg' => '机器人添加失败。', 'data' => null]);
+        }
+
+        return response()->json(['code' => 1, 'msg' => '', 'data' => $bot]);
 
         // dd($request);
         // dd(Auth::user());

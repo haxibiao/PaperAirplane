@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\App;
+use App\Models\Bot;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +42,10 @@ class LoginController extends Controller
             $appsecret = env("FS_BASE_APP_SECRET");
         }
 
-        $bot = BotController::create(new User(), $appid, $appsecret);
+        $bot = Bot::where('fs_app_id', $appid)->first();
+        if (!$bot) {
+            $bot = BotController::create(User::find(1), $appid, $appsecret);
+        }
 
         $fs_user = UserController::getFeishuUserInfo($bot->fs_access_token, $u_code);
 
