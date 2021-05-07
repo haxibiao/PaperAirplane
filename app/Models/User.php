@@ -84,7 +84,7 @@ class User extends Authenticatable
                 "grant_type"       => "authorization_code",
                 "code"             => $code,
             ]);
-            $resObj   = $response->json();
+            $resObj = $response->json();
             $userData = isset($resObj["data"]) ? $resObj["data"] : null;
 
             if ($resObj && $userData) {

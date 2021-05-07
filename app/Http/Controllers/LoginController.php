@@ -48,7 +48,7 @@ class LoginController extends Controller
             $appsecret = env("FS_BASE_APP_SECRET");
         }
 
-        $bot = Bot::where('fs_app_id', $appid)->first();
+        $bot = Bot::get();
         if (!$bot) {
             $bot = Bot::create(User::find(1), $appid, $appsecret);
         }

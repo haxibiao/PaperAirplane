@@ -66,12 +66,57 @@ class Bot extends Model
             $accessTokenObj       = Bot::getFeishuAppAccessToken($fsAppID, $fsAppSecret);
             $bot->fs_access_token = $accessTokenObj["token"];
             $bot->fs_access_time  = time() + $accessTokenObj["time"];
+            $bot->save();
         } catch (\Throwable $th) {
             // 机器人添加失败，获取飞书 Access Token 出现异常
             return null;
         }
 
-        $bot->save();
+        return $bot;
+    }
+
+    /**
+     * @description: 获取一个指定的 Bot 配置，不传参数则获取默认 Bot 配置
+     * @param {Int} $id
+     * @param {String} $fsAppID
+     * @param {String} $fsAppToken
+     * @return {*}
+     */
+    public static function get(Int $id = null, String $fsAppID = null, String $fsAppToken = null)
+    {
+        $bot = null;
+        if (!$id && !$fsAppID && !$fsAppToken) {
+            $bot = Bot::where('id', 1)->first();
+        }
+
+        if ($id) {
+            $bot = Bot::where('id', $id)->first();
+        }
+
+        if ($fsAppID) {
+            $bot = Bot::where('fs_app_id', $fsAppID)->first();
+        }
+
+        if ($fsAppToken) {
+            $bot = Bot::where('fs_access_token', $fsAppToken)->first();
+        }
+
+        if (!$bot) {
+            return $bot;
+        }
+
+        if ($bot->fs_access_time <= time()) {
+            try {
+                $accessTokenObj       = Bot::getFeishuAppAccessToken($bot->fs_app_id, $bot->fs_app_secret);
+                $bot->fs_access_token = $accessTokenObj["token"];
+                $bot->fs_access_time  = time() + $accessTokenObj["time"];
+                $bot->save();
+            } catch (\Throwable $th) {
+                // 刷新飞书 Access Token 出现异常
+                $bot = null;
+            }
+        }
+
         return $bot;
     }
 
