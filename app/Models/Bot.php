@@ -28,6 +28,14 @@ class Bot extends Model
     ];
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+    ];
+
+    /**
      * 获取该机器人的管理员
      */
     public function user()
@@ -65,16 +73,6 @@ class Bot extends Model
 
         $bot->save();
         return $bot;
-    }
-
-    /**
-     * @description: 根据用户获取其创建的全部 Bot
-     * @param {User} $user
-     * @return {Arrsy<User>}
-     */
-    public static function getListByUser(User $user)
-    {
-        return [];
     }
 
     /**
