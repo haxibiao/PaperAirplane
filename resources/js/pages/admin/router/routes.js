@@ -3,7 +3,7 @@
  * @Date: 2021-05-06
  * @FilePath: /PaperAirplane/resources/js/pages/admin/router/routes.js
  */
-import { HomeScreen, AppsScreen, DefaultScreen } from "../screens";
+import { HomeScreen, AppsScreen, UsersScreen, DefaultScreen } from "../screens";
 
 const routes = [
     {
@@ -15,6 +15,11 @@ const routes = [
         path: "/apps",
         exact: true,
         component: AppsScreen,
+    },
+    {
+        path: "/users",
+        exact: true,
+        component: UsersScreen,
     },
     {
         path: "*",

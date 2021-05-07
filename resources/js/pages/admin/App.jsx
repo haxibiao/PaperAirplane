@@ -5,10 +5,21 @@ import { Menu } from "element-react";
 import { useLocation, useHistory } from "react-router-dom";
 
 import Routers from "./router";
+import UserStore from "../../store/UserStore";
 
 export default function App() {
     const history = useHistory();
     const location = useLocation();
+
+    // 获取当前登陆用户信息
+    useEffect(() => {
+        const user =
+            document.getElementsByTagName("meta")["user"]?.content || {};
+        if (user) {
+            const me = JSON.parse(user);
+            UserStore.setMe(me);
+        }
+    }, []);
 
     // ----- 应用菜单栏配置 -------
     const menus = [
@@ -112,7 +123,7 @@ export default function App() {
                     </div>
                 ) : null}
 
-                <div className="app-content">
+                <div className="app-content" key={defaultMenuIndex}>
                     <Routers />
                 </div>
             </div>
