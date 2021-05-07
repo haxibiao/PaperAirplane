@@ -13,7 +13,7 @@ class AdminController extends Controller
     {
         $user = Auth::user();
         // dd($user);
-        return view("admin");
+        return view("admin", ["user" => $user]);
     }
 
 }
