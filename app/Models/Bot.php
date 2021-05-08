@@ -44,6 +44,14 @@ class Bot extends Model
     }
 
     /**
+     * 获取该机器人关联的全部 APP
+     */
+    public function apps()
+    {
+        return $this->hasMany('App\Models\App');
+    }
+
+    /**
      * @description: 创建一个 Bot 配置
      * @param {User} $user
      * @param {String} $fsAppID

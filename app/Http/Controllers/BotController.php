@@ -70,8 +70,10 @@ class BotController extends Controller
             return response()->json(['code' => -1, 'msg' => '用户信息异常。', 'data' => null]);
         }
 
-        $bots = Bot::where('user_id', $user->id)
-            ->simplePaginate(15);
+        // $bots = Bot::where('user_id', $user->id)
+        //     ->simplePaginate(15);
+
+        $bots = User::find($user->id)->bots()->paginate(15);
 
         $data = [];
         foreach ($bots as $key => $bot) {
@@ -91,14 +93,14 @@ class BotController extends Controller
         }
 
         $list = [
-            "count"             => $bots->count(), // 获取当前页数据的数量。
-            "current_page"      => $bots->currentPage(), // 获取当前页页码。
-            "per_page"          => $bots->perPage(), // 每页的数据条数。
-            "has_more_pages"    => $bots->hasMorePages(), // 是否有更多页。
+            "count"          => $bots->count(), // 获取当前页数据的数量。
+            "current_page"   => $bots->currentPage(), // 获取当前页页码。
+            "per_page"       => $bots->perPage(), // 每页的数据条数。
+            "has_more_pages" => $bots->hasMorePages(), // 是否有更多页。
             // "next_page_url"     => $bots->nextPageUrl(), // 获取下一页的 URL。
             // "previous_page_url" => $bots->previousPageUrl(), // 获取前一页的 URL。
 
-            "data"              => $data,
+            "data"           => $data,
         ];
 
         return response()->json(['code' => 1, 'msg' => '', 'data' => $list]);

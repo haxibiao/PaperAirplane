@@ -124,7 +124,7 @@ function Index() {
     };
 
     return (
-        <div className="screen-users">
+        <div className="screen-bots">
             <Layout.Row type="flex" justify="end" style={{ marginBottom: 15 }}>
                 <div style={{ flex: 1 }} />
                 <div>

@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer("status")->default(1)->comment("状态  0:禁用，1:启用");
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('api_token', 64)->unique();

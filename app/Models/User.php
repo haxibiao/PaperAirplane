@@ -44,6 +44,22 @@ class User extends Authenticatable
     ];
 
     /**
+     * 获取该用户管理的全部 Bot
+     */
+    public function bots()
+    {
+        return $this->hasMany('App\Models\Bot');
+    }
+
+    /**
+     * 获取该用户管理的全部 App
+     */
+    public function apps()
+    {
+        return $this->hasMany('App\Models\App');
+    }
+
+    /**
      * @description: 创建一个用户
      * @param {String} $fs_user_id
      * @param {String} $fs_user_name
@@ -83,7 +99,7 @@ class User extends Authenticatable
                 "grant_type"       => "authorization_code",
                 "code"             => $code,
             ]);
-            $resObj = $response->json();
+            $resObj   = $response->json();
             $userData = isset($resObj["data"]) ? $resObj["data"] : null;
 
             if ($resObj && $userData) {
