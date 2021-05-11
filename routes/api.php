@@ -23,6 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('auth:api')->post('/bot/create', [BotController::class, 'ApiCreateBot']);
 Route::middleware('auth:api')->get('/bot/list', [BotController::class, 'ApiGetListByUser']);
+Route::middleware('auth:api')->get('/bot/info', [BotController::class, 'ApiGetBotFeishuInfo']);
 
 Route::middleware('auth:api')->get('/user/me', [UserController::class, 'ApiGetMe']);
 Route::middleware('auth:api')->get('/user/list', [UserController::class, 'ApiGetList']);

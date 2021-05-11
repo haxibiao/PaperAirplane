@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
@@ -88,7 +89,7 @@ class Bot extends Model
      * @param {Int} $id
      * @param {String} $fsAppID
      * @param {String} $fsAppToken
-     * @return {*}
+     * @return Bot
      */
     public static function get(Int $id = null, String $fsAppID = null, String $fsAppToken = null)
     {
@@ -153,6 +154,39 @@ class Bot extends Model
         }
 
         return ["token" => $token, "time" => $time];
+    }
+
+    /**
+     * @description:
+     * @param {Bot} $bot
+     * @return {*}
+     */
+    public static function getFeishuAppInfo(Bot $bot)
+    {
+        if (!$bot) {
+            return null;
+        }
+
+        $accessToken = $bot->fs_access_token;
+
+        if ($accessToken) {
+            $response = Http::withHeaders([
+                'Content-Type'  => 'application/json; charset=utf-8',
+                'Authorization' => 'Bearer ' . $accessToken,
+            ])->get("https://open.feishu.cn/open-apis/bot/v3/info");
+            $resObj  = $response->json();
+            $botData = isset($resObj["bot"]) ? $resObj["bot"] : null;
+
+            if ($resObj && $botData) {
+                return $botData;
+            } else if (isset($resObj["msg"])) {
+                throw new Exception($resObj["msg"]);
+            }
+
+            return null;
+        }
+
+        return null;
     }
 
 }

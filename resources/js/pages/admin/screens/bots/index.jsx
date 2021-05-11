@@ -10,11 +10,13 @@ import {
     Input,
     Notification,
 } from "element-react";
+import { Drawer } from "rsuite";
 
 import useAxios from "axios-hooks";
 import axios from "axios";
 import { observer } from "mobx-react";
 import UserStore from "../../../../store/UserStore";
+import { CreateApp, ModifyBot } from "./components";
 
 function Index() {
     const [{ data, loading, error }, refetch] = useAxios({
@@ -46,13 +48,32 @@ function Index() {
             label: "操作",
             fixed: "right",
             width: 180,
-            render: () => {
+            render: (data) => {
                 return (
                     <span>
-                        <Button type="text" size="small">
+                        <Button
+                            type="text"
+                            size="small"
+                            onClick={() =>
+                                showDrawer("创建应用", () => (
+                                    <CreateApp
+                                        botData={data}
+                                        closeDrawer={closeDrawer}
+                                    />
+                                ))
+                            }
+                        >
                             创建应用
                         </Button>
-                        <Button type="text" size="small">
+                        <Button
+                            type="text"
+                            size="small"
+                            onClick={() =>
+                                showDrawer("修改配置", () => (
+                                    <ModifyBot botData={data} />
+                                ))
+                            }
+                        >
                             修改配置
                         </Button>
                     </span>
@@ -123,6 +144,21 @@ function Index() {
             });
     };
 
+    // 显示侧边栏
+    const [isDrawer, setisDrawer] = useState(false);
+    const [drawer, setdrawer] = useState(null);
+    const showDrawer = (title, view) => {
+        setdrawer({
+            title,
+            view,
+        });
+        setisDrawer(true);
+    };
+    const closeDrawer = () => {
+        setisDrawer(false);
+        setdrawer(null);
+    };
+
     return (
         <div className="screen-bots">
             <Layout.Row type="flex" justify="end" style={{ marginBottom: 15 }}>
@@ -136,12 +172,8 @@ function Index() {
                     </Button>
                 </div>
             </Layout.Row>
-            <Table
-                style={{ width: "100%" }}
-                columns={columns}
-                maxHeight={200}
-                data={list}
-            />
+
+            <Table style={{ width: "100%" }} columns={columns} data={list} />
 
             <Dialog
                 title="添加通知机器人"
@@ -205,6 +237,15 @@ function Index() {
                     </Button>
                 </Dialog.Footer>
             </Dialog>
+
+            <Drawer show={isDrawer} onHide={closeDrawer}>
+                <Drawer.Header>
+                    <Drawer.Title>{drawer?.title || ""}</Drawer.Title>
+                </Drawer.Header>
+                <Drawer.Body>
+                    {drawer?.view && React.createElement(drawer?.view)}
+                </Drawer.Body>
+            </Drawer>
         </div>
     );
 }

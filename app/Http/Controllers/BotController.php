@@ -56,7 +56,7 @@ class BotController extends Controller
     }
 
     /**
-     * @description: 相应获取当前用户全部 Bot GET 请求函数
+     * @description: 响应获取当前用户全部 Bot GET 请求函数
      * @param {Request} $request
      * @return {*}
      */
@@ -104,5 +104,38 @@ class BotController extends Controller
         ];
 
         return response()->json(['code' => 1, 'msg' => '', 'data' => $list]);
+    }
+
+    /**
+     * @description: 响应获取指定 Feishu Bot info GET 请求函数
+     * @param {Request} $request
+     * @return {*}
+     */
+    public function ApiGetBotFeishuInfo(Request $request)
+    {
+        // 获取当前登陆用户
+        $user  = Auth::user();
+        $botID = $request->input('id');
+
+        if (!$user || !$botID) {
+            return response()->json(['code' => -1, 'msg' => '关键参数不完整或用户信息异常。', 'data' => null]);
+        }
+
+        $bot = Bot::get($botID);
+        if (!$bot) {
+            return response()->json(['code' => -1, 'msg' => 'Bot 信息异常。', 'data' => null]);
+        }
+
+        try {
+            $info = Bot::getFeishuAppInfo($bot);
+        } catch (\Throwable $th) {
+            return response()->json(['code' => -1, 'msg' => $th->getMessage(), 'data' => null]);
+        }
+        if (!$info) {
+            return response()->json(['code' => -1, 'msg' => 'Bot 信息获取失败。', 'data' => null]);
+        }
+
+        return response()->json(['code' => 1, 'msg' => '', 'data' => $info]);
+
     }
 }

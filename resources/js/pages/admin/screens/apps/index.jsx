@@ -53,7 +53,7 @@ function Index() {
                             查看配置
                         </Button>
                         <Button type="text" size="small">
-                            编辑配置
+                            管理应用
                         </Button>
                         <Button type="text" size="small">
                             订阅管理
@@ -77,7 +77,6 @@ function Index() {
             <Table
                 style={{ width: "100%" }}
                 columns={columns}
-                maxHeight={200}
                 data={list}
             />
         </div>
