@@ -22,6 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->post('/bot/create', [BotController::class, 'ApiCreateBot']);
+Route::middleware('auth:api')->post('/bot/modify', [BotController::class, 'ApiModifyBot']);
 Route::middleware('auth:api')->get('/bot/list', [BotController::class, 'ApiGetListByUser']);
 Route::middleware('auth:api')->get('/bot/info', [BotController::class, 'ApiGetBotFeishuInfo']);
 

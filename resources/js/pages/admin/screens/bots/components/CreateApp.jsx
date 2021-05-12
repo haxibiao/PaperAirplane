@@ -20,6 +20,7 @@ import { useHistory } from "react-router";
 import useAxios from "axios-hooks";
 import axios from "axios";
 import UserStore from "../../../../../store/UserStore";
+import BotInfoCard from "./BotInfoCard";
 
 export default function CreateApp(props) {
     const { botData, closeDrawer } = props;
@@ -28,19 +29,7 @@ export default function CreateApp(props) {
 
     const history = useHistory();
 
-    const [botInfo, setbotInfo] = useState();
-    const [{ data: botInfoData, loading, error }, refetch] = useAxios({
-        url: "/api/bot/info?id=" + botData?.id,
-        headers: { Authorization: `Bearer ${UserStore.me?.api_token || ""}` },
-    });
-
-    useEffect(() => {
-        if (botInfoData?.data) {
-            // console.log("机器人数据", botInfoData.data);
-            setbotInfo(botInfoData?.data);
-        }
-    }, [botInfoData]);
-
+    const [botInfo, setbotInfo] = useState(null);
     const [createAppForm, setcreateAppForm] = useState({});
 
     const [createAppLoding, setcreateAppLoding] = useState(false);
@@ -92,60 +81,13 @@ export default function CreateApp(props) {
 
     return (
         <div>
-            {botInfo ? (
-                <Message
-                    type="info"
-                    style={{ marginBottom: 20 }}
-                    description={
-                        <div>
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <Avatar src={botInfo?.avatar_url} alt="icon" />
-                                <b style={{ paddingLeft: 10 }}>
-                                    {botInfo?.app_name}
-                                </b>
-
-                                {botInfo?.activate_status === 2 ? (
-                                    <Tag
-                                        style={{ marginLeft: 10 }}
-                                        color="green"
-                                    >
-                                        已激活
-                                    </Tag>
-                                ) : (
-                                    <Tag
-                                        color="orange"
-                                        style={{ marginLeft: 10 }}
-                                    >
-                                        未激活
-                                    </Tag>
-                                )}
-                            </div>
-                            <Divider style={{ background: "#FFF" }} />
-                            <div>
-                                <p style={{ color: "#0006" }}>
-                                    {botData?.remarks}
-                                </p>
-                            </div>
-                        </div>
-                    }
-                />
-            ) : (
-                <Message
-                    type="info"
-                    style={{ marginBottom: 20 }}
-                    description={
-                        <p>
-                            机器人信息获取失败，请检查是否在飞书中开启该应用的机器人功能：
-                            <a href="#">如何开启飞书 APP 的机器人功能？</a>
-                        </p>
-                    }
-                />
-            )}
+            <BotInfoCard
+                id={botData?.id}
+                remarks={botData?.remarks}
+                onGetInfo={(data) => {
+                    setbotInfo(data);
+                }}
+            />
 
             <Form
                 onChange={(value) => {

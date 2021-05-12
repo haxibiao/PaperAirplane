@@ -85,6 +85,46 @@ class Bot extends Model
     }
 
     /**
+     * @description: 修改指定 Bot 的信息
+     * @param {Int} $id
+     * @param {String} $fsAppID
+     * @param {String} $fsAppSecret
+     * @param {String} $remarks
+     * @return Bot
+     */
+    public static function modify(Int $id, String $fsAppID = null, String $fsAppSecret = null, String $remarks = null)
+    {
+        if (!$id) {
+            throw new Exception("bot id 不得为空");
+        }
+
+        $bot = Bot::get($id);
+        if (!$bot) {
+            throw new Exception("bot 不存在");
+        }
+
+        if ($fsAppID) {
+            $bot->fs_app_id = $fsAppID;
+        }
+
+        if ($fsAppSecret) {
+            $bot->fs_app_secret = $fsAppSecret;
+        }
+
+        if ($remarks) {
+            $bot->remarks = $remarks;
+        }
+
+        try {
+            $bot->save();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
+        return $bot;
+    }
+
+    /**
      * @description: 获取一个指定的 Bot 配置，不传参数则获取默认 Bot 配置
      * @param {Int} $id
      * @param {String} $fsAppID

@@ -56,6 +56,43 @@ class BotController extends Controller
     }
 
     /**
+     * @description: 响应修改 Bot POST 请求函数
+     * @param {Request} $request
+     * @return {*}
+     */
+    public function ApiModifyBot(Request $request)
+    {
+        // 定义关键参数数组
+        $id          = $request->json('id');
+        $fsAppID     = $request->json('app_id', null);
+        $fsAppSecret = $request->json('app_secret', null);
+        $remarks     = $request->json("remarks", null);
+
+        // 获取当前登陆用户
+        $user = Auth::user();
+
+        if (!$user || !$id) {
+            // 用户未登陆或缺少关键参数
+            return response()->json(['code' => -1, 'msg' => '关键参数不完整或用户信息异常。', 'data' => null]);
+        }
+
+        // 修改机器人信息
+        try {
+            $bot = Bot::modify($id, $fsAppID, $fsAppSecret, $remarks);
+            if (!$bot) {
+                return response()->json(['code' => -1, 'msg' => '机器人信息修改失败。', 'data' => null]);
+            }
+            return response()->json(['code' => 1, 'msg' => '', 'data' => $bot]);
+
+        } catch (\Throwable $th) {
+            return response()->json(['code' => -1, 'msg' => '机器人信息修改失败。' . $th->getMessage(), 'data' => null]);
+        }
+
+        // dd($request);
+        // dd(Auth::user());
+    }
+
+    /**
      * @description: 响应获取当前用户全部 Bot GET 请求函数
      * @param {Request} $request
      * @return {*}

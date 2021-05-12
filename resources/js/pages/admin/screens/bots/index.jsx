@@ -70,7 +70,11 @@ function Index() {
                             size="small"
                             onClick={() =>
                                 showDrawer("修改配置", () => (
-                                    <ModifyBot botData={data} />
+                                    <ModifyBot
+                                        botData={data}
+                                        closeDrawer={closeDrawer}
+                                        refetchBots={refetch}
+                                    />
                                 ))
                             }
                         >
