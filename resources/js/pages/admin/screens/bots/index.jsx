@@ -102,14 +102,14 @@ function Index() {
             return;
         }
 
-        setrefCreateBotLoding(true);
-
         if (!id || !secret) {
             Notification({
                 message: "飞书 APP ID 或 APP Secret 未填写！",
             });
             return;
         }
+
+        setrefCreateBotLoding(true);
 
         const data = { app_id: id, app_secret: secret, remarks };
 

@@ -43,6 +43,13 @@ export default function CreateApp(props) {
             return;
         }
 
+        if (!remarks) {
+            Notification({
+                message: "请填写应用备注，简单描述一下该通知应用的使用场景。",
+            });
+            return;
+        }
+
         setcreateAppLoding(true);
 
         const data = { bot_id: id, remarks };

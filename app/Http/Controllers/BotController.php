@@ -76,6 +76,11 @@ class BotController extends Controller
             return response()->json(['code' => -1, 'msg' => '关键参数不完整或用户信息异常。', 'data' => null]);
         }
 
+        if (!$fsAppID || !$fsAppSecret) {
+            // 缺少关键参数
+            return response()->json(['code' => -1, 'msg' => '飞书 App ID 和 飞书 App Secret 不得为空。', 'data' => null]);
+        }
+
         // 修改机器人信息
         try {
             $bot = Bot::modify($id, $fsAppID, $fsAppSecret, $remarks);

@@ -31,3 +31,4 @@ Route::middleware('auth:api')->get('/user/list', [UserController::class, 'ApiGet
 
 Route::middleware('auth:api')->post('/app/create', [AppController::class, 'ApiCreateApp']);
 Route::middleware('auth:api')->get('/app/list', [AppController::class, 'ApiGetListByUser']);
+Route::middleware('auth:api')->get('/app/users', [AppController::class, 'ApiGetSubscribeUserList']);

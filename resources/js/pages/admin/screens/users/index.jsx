@@ -19,18 +19,18 @@ function Index() {
             width: 80,
         },
         {
-            label: "飞书 ID",
-            prop: "fs_user_id",
-            width: 120,
-        },
-        {
             label: "账号",
             prop: "name",
-            width: 180,
+            width: 120,
         },
         {
             label: "姓名",
             prop: "fs_user_name",
+            width: 120,
+        },
+        {
+            label: "飞书 User ID",
+            prop: "fs_user_id",
         },
         {
             label: "操作",

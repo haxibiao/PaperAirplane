@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Message, Avatar, Tag, Divider } from "rsuite";
+import { Message, Avatar, Tag, Divider, Placeholder, Loader } from "rsuite";
+const { Paragraph } = Placeholder;
 
 import useAxios from "axios-hooks";
 import axios from "axios";
@@ -21,6 +22,14 @@ export default function BotInfoCard(props) {
             onGetInfo(botInfoData?.data);
         }
     }, [botInfoData]);
+
+    if (loading) {
+        return (
+            <Paragraph style={{ marginTop: 20, marginBottom: 20 }} rows={3}>
+                <Loader center content="loading" />
+            </Paragraph>
+        );
+    }
 
     return botInfo ? (
         <Message
