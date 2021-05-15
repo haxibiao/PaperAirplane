@@ -66,4 +66,42 @@ class UserController extends Controller
         return response()->json(['code' => 1, 'msg' => '', 'data' => $list]);
     }
 
+    /**
+     * @description: 响应通过关键词搜索一个用户接口
+     * @param {Request} $request
+     * @return {*}
+     */
+    public function ApiNameSearchUser(Request $request)
+    {
+        $keywords = $request->input("key", "");
+
+        if ($keywords) {
+            $users = User::where('fs_user_id', 'like', '%' . $keywords . '%')
+                ->orWhere('id', 'like', $keywords . '%')
+                ->orWhere('fs_user_name', 'like', '%' . $keywords . '%')
+                ->take(10)
+                ->get();
+
+            // dd($users);
+        } else {
+            $users = User::paginate(15);
+        }
+
+        $data = [];
+        foreach ($users as $key => $user) {
+            $data[$key] = [
+                "id"                 => $user->id,
+                "name"               => $user->name,
+                "email_verified_at"  => $user->email_verified_at,
+                "fs_user_id"         => $user->fs_user_id,
+                "fs_user_name"       => $user->fs_user_name,
+                "fs_user_avatar_url" => $user->fs_user_avatar_url,
+                "created_at"         => $user->created_at,
+                "updated_at"         => $user->updated_at,
+            ];
+        }
+
+        return response()->json(['code' => 1, 'msg' => '', 'data' => $data]);
+    }
+
 }

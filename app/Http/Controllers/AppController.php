@@ -12,7 +12,7 @@ class AppController extends Controller
 {
 
     /**
-     * @description: 相应创建通知应用请求接口
+     * @description: 响应创建通知应用请求接口
      * @param {Request} $request
      * @return {*}
      */
@@ -47,6 +47,11 @@ class AppController extends Controller
 
     }
 
+    /**
+     * @description: 响应根据用户获取应用列表请求接口
+     * @param {Request} $request
+     * @return {*}
+     */
     public function ApiGetListByUser(Request $request)
     {
         // 获取当前登陆用户
@@ -95,6 +100,11 @@ class AppController extends Controller
         return response()->json(['code' => 1, 'msg' => '', 'data' => $list]);
     }
 
+    /**
+     * @description: 响应获取订阅用户列表接口
+     * @param {Request} $request
+     * @return {*}
+     */
     public function ApiGetSubscribeUserList(Request $request)
     {
 
@@ -120,11 +130,208 @@ class AppController extends Controller
                 array_push($callBackUsers, $user_item);
             } catch (\Throwable $th) {
                 // 用户异常，跳过该用户
-                dd($th);
+                // dd($th);
             }
         }
 
         return response()->json(['code' => -1, 'msg' => '', 'data' => $callBackUsers]);
 
     }
+
+    /**
+     * @description: 响应将一个用户添加到订阅列表接口
+     * @param {Request} $request
+     * @return {*}
+     */
+    public function ApiAddSubscribeUser(Request $request)
+    {
+        // 获取请求参数
+        $appID    = $request->json('app_id');
+        $userID   = $request->json('user_id');
+        $fsUserID = $request->json('fs_user_id');
+
+        $my = Auth::user();
+        if (!$my || !$appID || (!$userID && !$fsUserID)) {
+            // 用户未登陆或关键参数未传递
+            return response()->json(['code' => -1, 'msg' => '用户信息异常或参数未输入。', 'data' => null]);
+        }
+
+        // 判断应用是否存在
+        $app = App::find($appID);
+        if (!$app) {
+            return response()->json(['code' => -1, 'msg' => '该通知应用 APP 不存在。', 'data' => null]);
+        }
+
+        // 判断用户是否存在
+        $user = null;
+        try {
+            if ($userID) {
+                $user = User::get($userID, null);
+            } else if ($fsUserID) {
+                $user = User::get(null, $fsUserID);
+            }
+            if (!$user) {
+                return response()->json(['code' => -1, 'msg' => '该用户不存在。', 'data' => null]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['code' => -1, 'msg' => $th->getMessage(), 'data' => null]);
+        }
+
+        // 获取应用已有订阅用户，将用户添加至订阅用户列表
+        $users = json_decode($app->users);
+        if ($user->fs_user_id) {
+            // 判断用户是否已经订阅，订阅用户列表判重
+            foreach ($users as $key => $item) {
+                if ($item == $user->fs_user_id) {
+                    return response()->json(['code' => -1, 'msg' => '该用户已订阅该通知。', 'data' => null]);
+                }
+            }
+            $users[] = $user->fs_user_id;
+        }
+
+        $app->users = $users;
+        $app->save();
+
+        return response()->json(['code' => 1, 'msg' => '', 'data' => $app]);
+
+    }
+
+    /**
+     * @description: 响应登陆用户订阅一个应用接口
+     * @param {Request} $request
+     * @return {*}
+     */
+    public function ApiAddSubscribeMy(Request $request)
+    {
+        // 获取请求参数
+        $appID = $request->json('app_id');
+
+        $my = Auth::user();
+        if (!$my || !$appID) {
+            // 用户未登陆或关键参数未传递
+            return response()->json(['code' => -1, 'msg' => '用户信息异常或参数未输入。', 'data' => null]);
+        }
+
+        // 判断应用是否存在
+        $app = App::find($appID);
+        if (!$app) {
+            return response()->json(['code' => -1, 'msg' => '该通知应用 APP 不存在。', 'data' => null]);
+        }
+
+        // 获取应用已有订阅用户，将用户添加至订阅用户列表
+        $users = json_decode($app->users);
+        if ($my->fs_user_id) {
+            // 判断用户是否已经订阅，订阅用户列表判重
+            foreach ($users as $key => $item) {
+                if ($item == $my->fs_user_id) {
+                    return response()->json(['code' => -1, 'msg' => '你已订阅该通知。', 'data' => null]);
+                }
+            }
+            $users[] = $my->fs_user_id;
+        }
+
+        $app->users = $users;
+        $app->save();
+
+        return response()->json(['code' => 1, 'msg' => '', 'data' => $app]);
+
+    }
+
+    /**
+     * @description: 响应将一个用户从应用订阅列表移除请求
+     * @param {Request} $request
+     * @return {*}
+     */
+    public function ApiDeleteSubscribeUser(Request $request)
+    {
+        // 获取请求参数
+        $appID    = $request->json('app_id');
+        $userID   = $request->json('user_id');
+        $fsUserID = $request->json('fs_user_id');
+
+        $my = Auth::user();
+        if (!$my || !$appID || (!$userID && !$fsUserID)) {
+            // 用户未登陆或关键参数未传递
+            return response()->json(['code' => -1, 'msg' => '用户信息异常或参数未输入。', 'data' => null]);
+        }
+
+        // 判断应用是否存在
+        $app = App::find($appID);
+        if (!$app) {
+            return response()->json(['code' => -1, 'msg' => '该通知应用 APP 不存在。', 'data' => null]);
+        }
+
+        // 判断用户是否存在
+        $user = null;
+        try {
+            if ($userID) {
+                $user = User::get($userID, null);
+            } else if ($fsUserID) {
+                $user = User::get(null, $fsUserID);
+            }
+            if (!$user) {
+                return response()->json(['code' => -1, 'msg' => '该用户不存在。', 'data' => null]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['code' => -1, 'msg' => $th->getMessage(), 'data' => null]);
+        }
+
+        // 获取应用已有订阅用户，将用户从订阅用户列表移除
+        $users = json_decode($app->users);
+        if ($user->fs_user_id) {
+            $user_keys = array_keys($users, $user->fs_user_id);
+            if (!$user_keys) {
+                return response()->json(['code' => -1, 'msg' => '此用户未订阅该通知。', 'data' => null]);
+            } else {
+                array_splice($users, $user_keys[0], 1);
+            }
+        }
+
+        $app->users = $users;
+        $app->save();
+
+        return response()->json(['code' => 1, 'msg' => '', 'data' => $app]);
+
+    }
+
+    /**
+     * @description: 响应登陆用户取消通知订阅
+     * @param {Request} $request
+     * @return {*}
+     */
+    public function ApiDeleteSubscribeMy(Request $request)
+    {
+        // 获取请求参数
+        $appID = $request->json('app_id');
+
+        $my = Auth::user();
+        if (!$my || !$appID) {
+            // 用户未登陆或关键参数未传递
+            return response()->json(['code' => -1, 'msg' => '用户信息异常或参数未输入。', 'data' => null]);
+        }
+
+        // 判断应用是否存在
+        $app = App::find($appID);
+        if (!$app) {
+            return response()->json(['code' => -1, 'msg' => '该通知应用 APP 不存在。', 'data' => null]);
+        }
+
+        // 获取应用已有订阅用户，将用户从订阅用户列表移除
+        $users = json_decode($app->users);
+        if ($my->fs_user_id) {
+            $user_keys = array_keys($users, $my->fs_user_id);
+            if (!$user_keys) {
+                return response()->json(['code' => -1, 'msg' => '你未订阅该通知。', 'data' => null]);
+            } else {
+                array_splice($users, $user_keys[0], 1);
+            }
+        }
+
+        $app->users = $users;
+        $app->save();
+
+        return response()->json(['code' => 1, 'msg' => '', 'data' => $app]);
+
+    }
+
 }

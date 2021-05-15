@@ -28,7 +28,12 @@ Route::middleware('auth:api')->get('/bot/info', [BotController::class, 'ApiGetBo
 
 Route::middleware('auth:api')->get('/user/me', [UserController::class, 'ApiGetMe']);
 Route::middleware('auth:api')->get('/user/list', [UserController::class, 'ApiGetList']);
+Route::middleware('auth:api')->get('/user/search', [UserController::class, 'ApiNameSearchUser']);
 
 Route::middleware('auth:api')->post('/app/create', [AppController::class, 'ApiCreateApp']);
 Route::middleware('auth:api')->get('/app/list', [AppController::class, 'ApiGetListByUser']);
 Route::middleware('auth:api')->get('/app/users', [AppController::class, 'ApiGetSubscribeUserList']);
+Route::middleware('auth:api')->post('/app/user/add', [AppController::class, 'ApiAddSubscribeUser']);
+Route::middleware('auth:api')->post('/app/my/add', [AppController::class, 'ApiAddSubscribeMy']);
+Route::middleware('auth:api')->post('/app/user/delete', [AppController::class, 'ApiDeleteSubscribeUser']);
+Route::middleware('auth:api')->post('/app/my/delete', [AppController::class, 'ApiDeleteSubscribeMy']);

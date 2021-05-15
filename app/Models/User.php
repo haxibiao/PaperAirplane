@@ -88,7 +88,7 @@ class User extends Authenticatable
      * @param {String} $fsUserId
      * @return User
      */
-    public static function get(Int $id, String $fsUserId)
+    public static function get(Int $id = null, String $fsUserId = null)
     {
         $user = null;
         if ($id) {
