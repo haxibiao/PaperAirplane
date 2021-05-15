@@ -67,6 +67,7 @@ function Index() {
                                     <ViewConfig
                                         data={data}
                                         closeDrawer={closeDrawer}
+                                        refetchApps={refetch}
                                     />
                                 ))
                             }
@@ -81,6 +82,7 @@ function Index() {
                                     <ControlApp
                                         data={data}
                                         closeDrawer={closeDrawer}
+                                        refetchApps={refetch}
                                     />
                                 ))
                             }
@@ -95,6 +97,7 @@ function Index() {
                                     <SubscribeUsers
                                         data={data}
                                         closeDrawer={closeDrawer}
+                                        refetchApps={refetch}
                                     />
                                 ))
                             }

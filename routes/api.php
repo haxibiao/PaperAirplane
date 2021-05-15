@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\BotController;
+use App\Http\Controllers\UseAppController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,3 +38,9 @@ Route::middleware('auth:api')->post('/app/user/add', [AppController::class, 'Api
 Route::middleware('auth:api')->post('/app/my/add', [AppController::class, 'ApiAddSubscribeMy']);
 Route::middleware('auth:api')->post('/app/user/delete', [AppController::class, 'ApiDeleteSubscribeUser']);
 Route::middleware('auth:api')->post('/app/my/delete', [AppController::class, 'ApiDeleteSubscribeMy']);
+
+Route::prefix('use')->middleware('auth:api')->group(function () {
+    Route::get('/app/{id}', [UseAppController::class, 'ApiAppData']);
+    Route::post('/app/{id}/unsubscribe', [UseAppController::class, 'ApiUnsubscribeByMe']);
+    Route::post('/app/{id}/subscribe', [UseAppController::class, 'ApiSubscribeByMe']);
+});

@@ -1,0 +1,93 @@
+@import "~element-theme-default";
+@import "~rsuite/dist/styles/rsuite-default.css";
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    background-color: #0001;
+
+    .app-content {
+        width: 100%;
+        margin: auto;
+        max-width: 620px;
+        min-height: 100vh;
+        background-color: #fff;
+
+        display: flex;
+        flex-direction: column;
+
+        .view-head {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            padding: 35px 0;
+
+            .icon {
+                display: flex;
+                align-content: center;
+                justify-content: center;
+                align-items: center;
+
+                .ic-link {
+                    margin: 0 15px;
+                }
+            }
+        }
+
+        .view-msg {
+            margin-bottom: 30px;
+            padding: 0 20px;
+            text-align: center;
+            .text {
+                font-size: 1.2rem;
+                color: #000;
+            }
+        }
+
+        .view-info {
+            flex: 1;
+            padding: 0 15px;
+
+            .text {
+                color: #000a;
+                font-size: 1rem;
+            }
+
+            .user {
+                display: flex;
+                align-content: center;
+                align-items: center;
+                margin-top: 15px;
+
+                p {
+                    font-size: 0.9rem;
+                    margin: 0;
+                    margin-left: 15px;
+                }
+
+                .name {
+                    color: #000;
+                    margin-bottom: 2px;
+                }
+
+                .desc {
+                    color: #0006;
+                    font-weight: 200;
+                }
+            }
+        }
+
+        .view-bar {
+            padding: 0 35px;
+            margin-bottom: 50px;
+        }
+    }
+
+    .rs-placeholder-paragraph-graph {
+        margin-right: 0px;
+    }
+}

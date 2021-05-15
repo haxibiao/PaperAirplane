@@ -10,7 +10,7 @@ import UserStore from "../../../../../store/UserStore";
 const { Column, HeaderCell, Cell, Pagination } = Table;
 
 export default function SubscribeUsers(props) {
-    const { data: appData, closeDrawer } = props;
+    const { data: appData, closeDrawer, refetchApps } = props;
 
     const [usersData, setusersData] = useState([]);
     const [addUserID, setaddUserID] = useState(null); // 选择添加订阅用户组件值
@@ -74,6 +74,9 @@ export default function SubscribeUsers(props) {
 
                 // 刷新订阅用户列表数据
                 subscribeRefetch();
+
+                // 刷新订阅应用列表
+                refetchApps();
             })
             .catch((error) => {
                 Notification({
@@ -118,6 +121,9 @@ export default function SubscribeUsers(props) {
 
                 // 清空选中的添加订阅用户组件的值
                 setaddUserID(null);
+
+                // 刷新订阅应用列表
+                refetchApps();
             })
             .catch((error) => {
                 Notification({

@@ -32,7 +32,7 @@ class LoginController extends Controller
     public function feishu(Request $request)
     {
         $u_code  = $request->get("code");
-        $u_appid = $request->get("state");
+        $u_appid = $request->get("state", null);
 
         if (!$u_code) {
             // 授权失败
@@ -40,15 +40,16 @@ class LoginController extends Controller
         }
 
         if ($u_appid) {
-            $app       = App::where('id', $u_appid)->get();
+            $app       = App::find($u_appid);
             $appid     = $app->bot->fs_app_id;
             $appsecret = $app->bot->fs_app_secret;
+            $bot       = $app->bot;
         } else {
             $appid     = env("FS_BASE_APP_ID");
             $appsecret = env("FS_BASE_APP_SECRET");
+            $bot       = Bot::get();
         }
 
-        $bot = Bot::get();
         if (!$bot) {
             $bot = Bot::create(User::find(1), $appid, $appsecret);
         }
@@ -69,7 +70,13 @@ class LoginController extends Controller
         }
 
         Auth::login($user, true);
-        return redirect()->intended('admin');
+
+        if ($u_appid) {
+            // 获取到 u_appid 参数的话表示，是其他通知应用请求的登陆（直接跳转普通用户订阅管理页面）
+            return redirect('/subscribe/' . $u_appid);
+        } else {
+            return redirect()->intended('admin');
+        }
     }
 
     /**
@@ -86,6 +93,16 @@ class LoginController extends Controller
         $appID  = $request->get("appid"); // 获取到 appid 参数的话表示，是其他通知应用请求的登陆
         $action = $request->get("action"); // 动作
         // TODO: 这里待实现通过 action 区分管理用户登陆还是普通订阅用户登陆，以便重定向不同 URL
+
+        if ($appID) {
+            $app = App::find($appID);
+
+            if ($app) {
+                $fsAppID     = $app->bot->fs_app_id;
+                $fsAppSecret = $app->bot->fs_app_secret;
+            }
+
+        }
 
         if ($fsAppID == null || $fsAppSecret == null) {
             abort(500, '项目飞书默认配置异常，请通知开发者！');

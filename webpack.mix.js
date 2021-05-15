@@ -28,3 +28,11 @@ mix.js("resources/js/pages/login/index.js", "public/js/login.js")
 mix.js("resources/js/pages/admin/index.js", "public/js/admin.js")
     .react()
     .sass("resources/js/pages/admin/scss/index.scss", "public/css/admin.css");
+
+// 用户订阅管理页面
+mix.js("resources/js/pages/subscribe/index.js", "public/js/subscribe.js")
+    .react()
+    .sass(
+        "resources/js/pages/subscribe/scss/index.scss",
+        "public/css/subscribe.css"
+    );
