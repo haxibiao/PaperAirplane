@@ -149,7 +149,7 @@ class UseAppController extends Controller
         // 获取请求参数
         $appID   = $id;
         $sign    = $request->json('sign');
-        $massage = $request->json('massage');
+        $massage = $request->json('message');
 
         if (!$appID || !$massage || !$sign) {
             // 用户未登陆或关键参数未传递
