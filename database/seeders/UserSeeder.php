@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -34,9 +35,11 @@ class UserSeeder extends Seeder
         }
 
         DB::table('users')->insert([
-            'name'     => 'admin',
-            'status'    => 1,
-            'password' => Hash::make('admin'),
+            'name'       => 'admin',
+            'status'     => 1,
+            'password'   => Hash::make('admin'),
+            'api_token'  => Str::random(64),
+            'fs_user_id' => 'admin',
         ]);
 
     }
