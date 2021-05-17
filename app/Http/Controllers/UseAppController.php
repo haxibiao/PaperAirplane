@@ -27,6 +27,11 @@ class UseAppController extends Controller
             return response()->json(['code' => -1, 'msg' => '用户信息异常或参数未输入。', 'data' => null]);
         }
 
+        // admin 用户不能订阅
+        if ($my->name == "admin") {
+            return response()->json(['code' => -1, 'msg' => 'admin 用户不允许添加订阅。', 'data' => null]);
+        }
+
         // 判断应用是否存在
         $app = App::find($appID);
         if (!$app) {

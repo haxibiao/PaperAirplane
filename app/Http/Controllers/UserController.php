@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         $value = $request->cookie('api_token');
 
-        dd($value);
+        // dd($value);
         $user = Auth::user();
 
         if (!$user) {

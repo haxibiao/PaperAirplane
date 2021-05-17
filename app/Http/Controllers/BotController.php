@@ -105,9 +105,9 @@ class BotController extends Controller
     public function ApiGetListByUser(Request $request)
     {
         // 获取当前登陆用户
-        $user = Auth::user();
+        $me = Auth::user();
 
-        if (!$user) {
+        if (!$me) {
             // 用户未登陆
             return response()->json(['code' => -1, 'msg' => '用户信息异常。', 'data' => null]);
         }
@@ -115,7 +115,12 @@ class BotController extends Controller
         // $bots = Bot::where('user_id', $user->id)
         //     ->simplePaginate(15);
 
-        $bots = User::find($user->id)->bots()->paginate(15);
+        if ($me->name == "admin") {
+            // admin 用户可以管理全部机器人
+            $bots = Bot::all()->paginate(15);
+        } else {
+            $bots = User::find($me->id)->bots()->paginate(15);
+        }
 
         $data = [];
         foreach ($bots as $key => $bot) {

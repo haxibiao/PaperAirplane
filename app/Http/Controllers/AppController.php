@@ -55,14 +55,19 @@ class AppController extends Controller
     public function ApiGetListByUser(Request $request)
     {
         // 获取当前登陆用户
-        $user = Auth::user();
+        $me = Auth::user();
 
-        if (!$user) {
+        if (!$me) {
             // 用户未登陆
             return response()->json(['code' => -1, 'msg' => '用户信息异常。', 'data' => null]);
         }
 
-        $apps = User::find($user->id)->apps()->paginate(15);
+        if ($me->name == "admin") {
+            // admin 用户拥有管理全部 app 权限
+            $apps = App::all()->paginate(15);
+        } else {
+            $apps = User::find($me->id)->apps()->paginate(15);
+        }
 
         $data = [];
         foreach ($apps as $key => $app) {
@@ -170,6 +175,11 @@ class AppController extends Controller
             } else if ($fsUserID) {
                 $user = User::get(null, $fsUserID);
             }
+
+            if ($user->name == "admin") {
+                return response()->json(['code' => -1, 'msg' => 'admin 用户不允许添加订阅。', 'data' => null]);
+            }
+
             if (!$user) {
                 return response()->json(['code' => -1, 'msg' => '该用户不存在。', 'data' => null]);
             }
@@ -210,6 +220,10 @@ class AppController extends Controller
         if (!$my || !$appID) {
             // 用户未登陆或关键参数未传递
             return response()->json(['code' => -1, 'msg' => '用户信息异常或参数未输入。', 'data' => null]);
+        }
+
+        if ($my->name == "admin") {
+            return response()->json(['code' => -1, 'msg' => 'admin 用户不允许添加订阅。', 'data' => null]);
         }
 
         // 判断应用是否存在
