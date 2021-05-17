@@ -39,8 +39,11 @@ Route::middleware('auth:api')->post('/app/my/add', [AppController::class, 'ApiAd
 Route::middleware('auth:api')->post('/app/user/delete', [AppController::class, 'ApiDeleteSubscribeUser']);
 Route::middleware('auth:api')->post('/app/my/delete', [AppController::class, 'ApiDeleteSubscribeMy']);
 
-Route::prefix('use')->middleware('auth:api')->group(function () {
-    Route::get('/app/{id}', [UseAppController::class, 'ApiAppData']);
-    Route::post('/app/{id}/unsubscribe', [UseAppController::class, 'ApiUnsubscribeByMe']);
-    Route::post('/app/{id}/subscribe', [UseAppController::class, 'ApiSubscribeByMe']);
+Route::prefix('use')->group(function () {
+
+    Route::middleware('auth:api')->get('/app/{id}', [UseAppController::class, 'ApiAppData']);
+    Route::middleware('auth:api')->post('/app/{id}/unsubscribe', [UseAppController::class, 'ApiUnsubscribeByMe']);
+    Route::middleware('auth:api')->post('/app/{id}/subscribe', [UseAppController::class, 'ApiSubscribeByMe']);
+
+    Route::post('/message/text/{id}', [UseAppController::class, 'ApiMessagePushText']);
 });

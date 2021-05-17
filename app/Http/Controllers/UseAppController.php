@@ -138,4 +138,41 @@ class UseAppController extends Controller
 
     }
 
+    /**
+     * @description: 响应使用应用请求发送文本消息接口
+     * @param {Request} $request
+     * @param {*} $id
+     * @return {*}
+     */
+    public function ApiMessagePushText(Request $request, $id)
+    {
+        // 获取请求参数
+        $appID   = $id;
+        $sign    = $request->json('sign');
+        $massage = $request->json('massage');
+
+        if (!$appID || !$massage || !$sign) {
+            // 用户未登陆或关键参数未传递
+            return response()->json(['code' => -1, 'msg' => '用户信息异常或参数未输入。', 'data' => null]);
+        }
+
+        $app = App::where([
+            ['id', '=', $appID],
+            ['sign', '=', $sign],
+        ])->first();
+
+        if (!$app) {
+            return response()->json(['code' => -1, 'msg' => '通知应用不存在或 sign 异常。', 'data' => null]);
+        }
+
+        try {
+            $callBack = App::pushMessageToUsers($app, "text", '{ "text": "' . $massage . '" }');
+        } catch (\Throwable $th) {
+            return response()->json(['code' => -1, 'msg' => $th->getMessage(), 'data' => null]);
+        }
+
+        return response()->json(['code' => 1, 'msg' => $callBack['msg'], 'data' => $callBack['data']]);
+
+    }
+
 }

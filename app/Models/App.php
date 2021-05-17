@@ -5,6 +5,7 @@ namespace App\Models;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class App extends Model
@@ -37,6 +38,12 @@ class App extends Model
     public function bot()
     {
         return $this->belongsTo('App\Models\Bot');
+    }
+
+    // 获取 APP 的 Bot (此处获取的 Bot 才能保证 accessToken 有效)
+    public function getBot()
+    {
+        return Bot::get($this->bot->id);
     }
 
     /**
@@ -132,6 +139,43 @@ class App extends Model
         }
 
         return $app;
+    }
+
+    public static function pushMessageToUsers(App $app, String $type, String $content)
+    {
+
+        if (!$app || !$type || !$content) {
+            throw new Exception("参数不完整！");
+        }
+
+        $bot = $app->getBot();
+        if (!$bot) {
+            throw new Exception("该应用绑定的 Bot 异常。");
+        }
+
+        try {
+            $users      = json_decode($app->users);
+            $contentObj = json_decode($content);
+            if (count($users) < 1) {
+                // 判断该应用不存在任何订阅用户
+                return null;
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
+        $response = Http::withHeaders([
+            'Content-Type'  => 'application/json; charset=utf-8',
+            'Authorization' => 'Bearer ' . $bot->fs_access_token,
+        ])->post("https://open.feishu.cn/open-apis/message/v4/batch_send/", [
+            "user_ids" => $users,
+            "msg_type" => $type,
+            "content"  => $contentObj,
+        ]);
+        $resObj       = $response->json();
+        $callBackData = isset($resObj["data"]) ? $resObj["data"] : null;
+
+        return $resObj;
     }
 
 }
