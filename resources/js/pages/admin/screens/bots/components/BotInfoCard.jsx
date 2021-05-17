@@ -70,7 +70,7 @@ export default function BotInfoCard(props) {
             description={
                 <p>
                     机器人信息获取失败，请检查是否在飞书中开启该应用的机器人功能：
-                    <a href="#">如何开启飞书 APP 的机器人功能？</a>
+                    <a href={`https://haxibiao.feishu.cn/docs/doccnJMoBPX5g0kklGx1cv36Xuf`}>如何开启飞书 APP 的机器人功能？</a>
                 </p>
             }
         />
