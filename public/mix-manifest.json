@@ -1,0 +1,10 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/js/login.js": "/js/login.js",
+    "/js/admin.js": "/js/admin.js",
+    "/js/subscribe.js": "/js/subscribe.js",
+    "/css/subscribe.css": "/css/subscribe.css",
+    "/css/admin.css": "/css/admin.css",
+    "/css/app.css": "/css/app.css",
+    "/css/login.css": "/css/login.css"
+}
