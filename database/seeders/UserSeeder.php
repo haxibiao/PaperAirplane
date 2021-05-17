@@ -40,6 +40,8 @@ class UserSeeder extends Seeder
             'password'   => Hash::make('admin'),
             'api_token'  => Str::random(64),
             'fs_user_id' => 'admin',
+            'fs_user_name' => 'admin',
+            'fs_user_avatar_url' => 'https://haxibiao.com/user/257',
         ]);
 
     }
