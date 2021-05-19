@@ -1,6 +1,8 @@
 # PaperAirplane 纸飞机飞书消息推送管理平台 📬
 
-> 基于飞书消息推送开发的管理平台。打造更方便，更高效，更开放，更有意思。
+> 基于但不限于飞书消息推送开发的管理平台。打造更方便，更高效，更开放，更有意思。
+
+<img style="height: 180px;" alt="databash_design" src="docs/assets/admin_apps_page.png" /><img style="height: 180px;margin-left: 5px;" alt="databash_design" src="docs/assets/user_subscribe_page.jpg" /><br/>
 
 ## 技术栈 🎨
 
@@ -52,6 +54,7 @@ FS_BASE_APP_SECRET=""    # 这里填写一个默认的飞书 App Secret
 ```
 
 4，生成一个 APP_KEY，进行数据库迁移，创建 admin 账号
+
 ```
 php artisan key:generate
 
@@ -60,7 +63,7 @@ php artisan migrate
 php artisan db:seed
 ```
 
-6，访问 http://域名/admin  ,选择飞书登陆
+6，访问 http://域名/admin ,选择飞书登陆
 
 如何使用 PaperAirplane 完成第一次消息推送：[点击查看飞书应用对接使用文档](https://haxibiao.feishu.cn/docs/doccnJMoBPX5g0kklGx1cv36Xuf?from=from_copylink)
 
