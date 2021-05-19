@@ -3,7 +3,7 @@
 > 基于但不限于飞书消息推送开发的管理平台。打造更方便，更高效，更开放，更有意思。
 
 
-<img height="180" alt="databash_design" src="docs/assets/admin_apps_page.png" /><img height="180" alt="databash_design" src="docs/assets/user_subscribe_page.jpg" /><br/>
+<img height="260" alt="databash_design" src="docs/assets/admin_apps_page.png" /><img height="260" alt="databash_design" src="docs/assets/user_subscribe_page.jpg" /><br/>
 
 ## 技术栈 🎨
 
