@@ -48,7 +48,7 @@ DB_DATABASE=paperairplane    # 这里填写数据库名称
 DB_USERNAME=root    # 这里填写数据库账号
 DB_PASSWORD=   # 这里填写 mysql 数据库密码
 
-# 下列配置文件需要从 open.feishu.com 获取，详细获取教程可参照飞书应用对接使用文档创建一个
+# 下列配置文件需要从 open.feishu.cn 获取，详细获取教程可参照飞书应用对接使用文档创建一个
 FS_BASE_APP_ID=""    # 这里填写一个默认的飞书 App ID
 FS_BASE_APP_SECRET=""    # 这里填写一个默认的飞书 App Secret
 
@@ -62,6 +62,11 @@ php artisan key:generate
 php artisan migrate
 
 php artisan db:seed
+```
+
+5，编译前端资源
+```
+npm install && npm run prod
 ```
 
 6，访问 http://域名/admin ,选择飞书登陆
